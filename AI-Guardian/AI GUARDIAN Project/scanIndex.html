@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ingredients Scanner</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+
+    <link rel="stylesheet" href="/AI-Guardian/css/scanIndex.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-search"></i> Food Ingredients Scanner</h1>
+        <p class="subtitle">Choose your scanning method</p>
+    </div>
+    
+    <div class="menu-container">
+        <div class="menu">
+            <a href="barcode-scanner.html" class="menu-item">
+                <div class="menu-icon"><i class="fas fa-barcode"></i></div>
+                <div class="menu-content">
+                    <div class="menu-title">Scan Barcode</div>
+                    <div class="menu-desc">Quickly scan product barcodes</div>
+                </div>
+                <i class="fas fa-chevron-right arrow"></i>
+            </a>
+            <a href="manual-input.html" class="menu-item">
+                <div class="menu-icon"><i class="fas fa-keyboard"></i></div>
+                <div class="menu-content">
+                    <div class="menu-title">Manual Input</div>
+                    <div class="menu-desc">Enter product details manually</div>
+                </div>
+                <i class="fas fa-chevron-right arrow"></i>
+            </a>
+            <a href="receipt-upload.html" class="menu-item">
+                <div class="menu-icon"><i class="fas fa-receipt"></i></div>
+                <div class="menu-content">
+                    <div class="menu-title">Upload Receipt</div>
+                    <div class="menu-desc">Scan multiple items from receipt</div>
+                </div>
+                <i class="fas fa-chevron-right arrow"></i>
+            </a>
+            <a href="ingredient-photo.html" class="menu-item">
+                <div class="menu-icon"><i class="fas fa-camera"></i></div>
+                <div class="menu-content">
+                    <div class="menu-title">Photo of Ingredients</div>
+                    <div class="menu-desc">Analyze ingredients from photo</div>
+                </div>
+                <i class="fas fa-chevron-right arrow"></i>
+            </a>
+            <a href="allergy-selection.html" class="menu-item allergy-item">
+                <div class="menu-icon"><i class="fas fa-allergies"></i></div>
+                <div class="menu-content">
+                    <div class="menu-title">Allergen Preferences</div>
+                    <div class="menu-desc">Set your dietary restrictions</div>
+                </div>
+                <i class="fas fa-chevron-right arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbotIcon">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+    
+    <div class="navbar">
+        <ul>
+            <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="scanIndex.html" class="active"><i class="fas fa-barcode"></i> Scan</a></li>
+            <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </div>
+
+    <script src="/AI-Guardian/scripts/scanIndex.js"></script>
+</body>
+</html>

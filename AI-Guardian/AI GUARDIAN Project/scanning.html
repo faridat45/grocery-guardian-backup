@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ingredients Scanner</title>
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/scanning.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==================== SCANNING PAGE STYLES ==================== */
+        .scan-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-xl) var(--spacing-md);
+            text-align: center;
+        }
+        
+        .scan-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+            width: 100%;
+            max-width: 300px;
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .scan-button {
+            width: 100%;
+            padding: var(--spacing-md);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .scan-button i {
+            font-size: 1.2rem;
+        }
+        
+        .scan-button.secondary {
+            background: white;
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-light);
+        }
+        
+        .scan-button.secondary:hover {
+            background: var(--background-lighter);
+        }
+        
+        /* Camera preview styling */
+        #camera {
+            width: 100%;
+            max-width: 500px;
+            margin: var(--spacing-md) auto;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Manual input styling */
+        #manualInput {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            width: 100%;
+            max-width: 400px;
+            margin: var(--spacing-md) auto;
+        }
+        
+        /* Result styling */
+        #result {
+            width: 100%;
+            max-width: 600px;
+            margin: var(--spacing-md) auto;
+        }
+        
+        .ingredient-list {
+            margin: var(--spacing-md) 0;
+            padding: 0;
+            text-align: left;
+        }
+        
+        .ingredient-item {
+            display: block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            margin-bottom: 0.25rem;
+            border-radius: var(--border-radius-sm);
+            background-color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            padding-left: 1.75rem;
+        }
+        
+        .ingredient-item::before {
+            content: "•";
+            position: absolute;
+            left: 0.75rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .ingredient-item.allergen {
+            background-color: rgba(229, 57, 53, 0.1);
+            border-left: 3px solid var(--danger);
+            padding-left: 1.5rem;
+        }
+        
+        .ingredient-item.allergen::before {
+            content: "⚠";
+            left: 0.5rem;
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <div class="main scan-page">
+        <h1><i class="fas fa-barcode"></i> Barcode Scanner</h1>
+        
+        <div class="scan-options">
+            <button class="scan-button" onclick="startScanning()">
+                <i class="fas fa-barcode"></i> Scan Barcode
+            </button>
+            <button class="scan-button" onclick="window.location.href='receipt-capture.html'">
+                <i class="fas fa-receipt"></i> Scan Receipt
+            </button>
+            <button class="scan-button" id="manualInputButton" onclick="showManualInput()">
+                <i class="fas fa-keyboard"></i> Manual Input
+            </button>
+            <button class="scan-button secondary" onclick="window.location.href='allergy-selection.html'">
+                <i class="fas fa-allergies"></i> Allergen Preferences
+            </button>
+        </div>
+
+        <div id="camera" class="hidden"></div>
+        
+        <div id="manualInput" class="hidden">
+            <input type="text" id="barcode" placeholder="Enter barcode" class="scan-input">
+            <button class="scan-button" onclick="fetchProductInfo()">
+                <i class="fas fa-search"></i> Get Ingredients
+            </button>
+        </div>
+
+        <div id="result" class="hidden">
+            <h2><i class="fas fa-info-circle"></i> Product Information</h2>
+            <div class="product-info">
+                <p><strong>Product Name:</strong> <span id="productName">-</span></p>
+                <img id="productImage" src="" alt="Product Image" class="hidden product-image">
+            </div>
+            
+            <h3><i class="fas fa-list"></i> Ingredients</h3>
+            <div class="ingredient-list" id="ingredientsList"></div>
+            
+            <div id="allergen-warning" class="allergen-warning hidden">
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                <div class="warning-content"></div>
+            </div>
+            
+            <div class="nutrient-info">
+                <h3><i class="fas fa-chart-bar"></i> Nutrient Levels</h3>
+                <p id="nutrientLevels">-</p>
+            </div>
+            
+            <div id="quantitySection" class="quantity-section">
+                <label for="quantityInput"><strong>Quantity Purchased:</strong></label>
+                <input type="number" id="quantityInput" min="1" value="1">
+                <button class="scan-button" onclick="saveToHistory()">
+                    <i class="fas fa-save"></i> Add to History
+                </button>
+            </div>
+        </div>
+
+        <div id="alternativeSection" class="hidden">
+            <h2><i class="fas fa-exchange-alt"></i> Safe Alternatives</h2>
+            <div id="alternativeProducts" class="alternative-grid"></div>
+        </div>
+
+        <p class="upload-prompt">
+            <i class="fas fa-info-circle"></i> If barcode doesn't work, you can upload a picture of the ingredient list.
+        </p>
+        <input type="file" id="imageInput" accept="image/*" class="file-input">
+        
+        <div id="result2" class="hidden">
+            <h4><i class="fas fa-file-alt"></i> Extracted Text:</h4>
+            <div id="extractedText" class="extracted-text"></div>
+            <p id="warning" class="warning-message"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+    <script>
+        // existing JavaScript code remains the same
+        const userId = 1;
+        let userAllergens = [];
+        let currentProduct = null;
+
+        async function loadUserAllergens() {
+            try {
+                const res = await fetch(`http://localhost:5000/api/preferences/${userId}`);
+                userAllergens = await res.json();
+            } catch (err) {
+                console.error("Failed to load user allergens:", err);
+                userAllergens = [];
+            }
+        }
+
+        let lastDetectedCode = null;
+        let lastDetectionTime = 0;
+        let isCameraInitialized = false;
+
+        async function startScanning() {
+            document.getElementById('camera').classList.remove('hidden');
+            document.getElementById('manualInput').classList.add('hidden');
+
+            if (!isCameraInitialized) {
+                initializeScanner();
+                isCameraInitialized = true;
+            }
+        }
+
+        function showManualInput() {
+            document.getElementById('camera').classList.add('hidden');
+            document.getElementById('manualInput').classList.remove('hidden');
+        }
+
+        function initializeScanner() {
+            Quagga.init({
+                inputStream: {
+                    target: "#camera",
+                    type: "LiveStream",
+                    constraints: {
+                        width: 640,
+                        height: 480,
+                        facingMode: "environment",
+                        aspectRatio: 1.5
+                    }
+                },
+                decoder: {
+                    readers: [
+                        'code_128_reader', 'ean_reader', 'ean_8_reader',
+                        'upc_reader', 'upc_e_reader', 'code_39_reader',
+                        'code_39_vin_reader', 'codabar_reader',
+                        'i2of5_reader', '2of5_reader', 'code_93_reader'
+                    ]
+                },
+                locator: { patchSize: "medium", halfSample: true },
+                locate: true,
+                numOfWorkers: 4
+            }, function(err) {
+                if (err) return console.error("Initialization failed:", err);
+                Quagga.start();
+            });
+
+            Quagga.onDetected(result => {
+                const code = result.codeResult.code;
+                const now = Date.now();
+
+                if (code === lastDetectedCode && (now - lastDetectionTime) < 5000) return;
+
+                document.getElementById('barcode').value = code;
+                fetchProductInfo();
+
+                lastDetectedCode = code;
+                lastDetectionTime = now;
+            });
+        }
+
+        async function fetchProductInfo() {
+            await loadUserAllergens();
+            const barcode = document.getElementById('barcode').value;
+            if (!barcode) return alert('Please enter a barcode.');
+
+            const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.status !== 1) throw new Error('Product not found');
+
+                const p = data.product;
+                currentProduct = {
+                    name: p.product_name || p.generic_name_en || p.product_name_en || p.product_name_it || p.generic_name || p.abbreviated_product_name || p.brands || 'Unknown Product',
+                    ingredients: p.ingredients_text_en || p.ingredients_text || '',
+                    barcode: barcode,
+                    image: p.image_front_small_url || "https://cdn-icons-png.flaticon.com/512/1178/1178479.png"
+                };
+
+                const openFoodAllergens = (p.allergens || '').split(',').map(a => a.trim().replace(/^[a-z]{2}:/, '').toLowerCase()).filter(Boolean);
+                const nutrientText = Object.entries(p.nutrient_levels || {}).map(([k, v]) => `${k}: ${v}`).join(", ");
+
+                // Update UI
+                document.getElementById('productName').textContent = currentProduct.name;
+                document.getElementById('nutrientLevels').textContent = nutrientText || "No data";
+                document.getElementById('productImage').src = currentProduct.image;
+                document.getElementById('productImage').classList.remove('hidden');
+                document.getElementById('camera').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+
+                // Display ingredients as list items
+                const ingredientsList = document.getElementById('ingredientsList');
+                ingredientsList.innerHTML = '';
+                const ingredients = currentProduct.ingredients.split(',').map(i => i.trim());
+                ingredients.forEach(ingredient => {
+                    const isAllergen = userAllergens.some(allergen => 
+                        ingredient.toLowerCase().includes(allergen.toLowerCase()));
+                    
+                    const item = document.createElement('div');
+                    item.className = isAllergen ? 'ingredient-item allergen' : 'ingredient-item';
+                    item.textContent = ingredient;
+                    ingredientsList.appendChild(item);
+                });
+
+                // Display allergen warning
+                const warningBox = document.getElementById('allergen-warning');
+                const warningContent = document.querySelector('.warning-content');
+                
+                if (openFoodAllergens.some(a => userAllergens.includes(a.toLowerCase()))) {
+                    const filtered = openFoodAllergens.filter(a => userAllergens.includes(a.toLowerCase()));
+                    warningContent.innerHTML = `<strong>Warning:</strong> This product contains ${filtered.join(", ")}`;
+                    warningBox.classList.remove('hidden');
+                } else {
+                    warningContent.innerHTML = `<strong>No allergens detected</strong> based on your preferences`;
+                    warningBox.classList.remove('hidden');
+                    warningBox.style.backgroundColor = 'rgba(67, 160, 71, 0.1)';
+                    warningBox.style.borderLeftColor = 'var(--success)';
+                    document.querySelector('.warning-icon').style.color = 'var(--success)';
+                }
+
+                fetchAlternativeProducts(userAllergens);
+            } catch (err) {
+                alert('Failed to fetch product information.');
+                console.error(err);
+            }
+        }
+
+        async function saveToHistory() {
+            if (!currentProduct) return;
+            
+            const quantity = document.getElementById('quantityInput').value;
+            if (!quantity || quantity < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/scan-history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: userId,
+                        product: {
+                            name: currentProduct.name,
+                            barcode: currentProduct.barcode,
+                            ingredients: currentProduct.ingredients,
+                            quantity: quantity
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Product added to history!');
+                    // Reset form
+                    document.getElementById('result').classList.add('hidden');
+                    document.getElementById('barcode').value = '';
+                } else {
+                    throw new Error('Failed to save to history');
+                }
+            } catch (err) {
+                console.error("Error saving to history:", err);
+                alert('Failed to save to history');
+            }
+        }
+
+        async function fetchAlternativeProducts(userAllergens) {
+            const barcode = document.getElementById('barcode').value.trim();
+            if (!barcode) return;
+
+            const productUrl = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
+            try {
+                const res = await fetch(productUrl);
+                const data = await res.json();
+                if (data.status !== 1) return;
+
+                const tags = data.product.categories_tags || [];
+                const matched = tags.find(tag => ["chocolates", "candies", "snacks", "beverages", "sweets"].includes(tag.replace("en:", ""))) || "chocolates";
+
+                const query = userAllergens.map(a => `-ingredients_text:${encodeURIComponent(a)}`).join("&");
+                const url = `https://world.openfoodfacts.org/cgi/search.pl?action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=${matched.replace("en:", "")}&sort_by=popularity&json=1&fields=product_name,ingredients_text,image_url&${query}`;
+
+                const searchRes = await fetch(url);
+                const searchData = await searchRes.json();
+
+                const container = document.getElementById('alternativeProducts');
+                container.innerHTML = '';
+                const safe = searchData.products.filter(p => p.ingredients_text && !userAllergens.some(a => p.ingredients_text.toLowerCase().includes(a.toLowerCase())));
+
+                if (safe.length === 0) {
+                    container.innerHTML = '<p>No safe alternatives found.</p>';
+                    return;
+                }
+
+                safe.slice(0, 3).forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'alternative-product';
+                    div.innerHTML = `
+                        <h4>${p.product_name || 'Unnamed Product'}</h4>
+                        ${p.image_url ? `<img src="${p.image_url}" alt="Product Image">` : ''}
+                        <button class="scan-button" onclick="window.location.href='scanning.html?barcode=${p.code}'">
+                            <i class="fas fa-search"></i> View Details
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                document.getElementById('alternativeSection').classList.remove('hidden');
+            } catch (err) {
+                console.error("Error fetching alternatives:", err);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatbotIcon = document.getElementById('chatbotIcon');
+            
+            if (chatbotIcon) {
+                chatbotIcon.addEventListener('click', () => {
+                    window.location.href = '/AI-GUARDIAN/AI GUARDIAN Project/help.html';
+                });
+            }
+        });
+        </script>
+
+
+<!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbotIcon">
+    <i class="fa-solid fa-robot"></i>
+  </div>
+
+
+
+    <div class="navbar">
+        <ul>
+            <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="scanning.html" class="active"><i class="fas fa-barcode"></i> Scan</a></li>
+            <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </div>
+</body>
+</html>

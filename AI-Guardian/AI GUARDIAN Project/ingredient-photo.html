@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingredient Photo</title>
+    <link rel="stylesheet" href="/AI-Guardian/css/ingredient-scanner.css">
+</head>
+<body>
+    <h1>Photo of Ingredients</h1>
+    
+    <p>If barcode doesn't work, you can take a picture of ingredient list.</p>
+    <input type="file" id="imageInput" accept="image/*">
+    <label for="imageInput" class="upload-button">Choose Ingredient Photo</label>
+
+    <div id="result" class="hidden">
+       <h4>Extracted Text：</h4>
+       <pre id="extractedText"></pre>
+       <p id="warning"></p> 
+    </div>
+
+    <div id="confirmSection">
+        <button id="saftFoodButton">Mark this safe food</button>
+        <button id="unsafeFoodButton">Mark this unsafe food</button>
+        <div id="questions" class="hidden">
+            <p>How many of this product did you purchase?</p>
+            <input type="number" placeholder="type number">
+            <p>Food Name:</p>
+            <input type="text" id="foodNameInput">
+            <button id="confirmButton">Save</button>
+        </div>
+        <p id="saveNotice"></p>
+    </div>
+
+    <a href="scanIndex.html" class="back-button">Back to Main</a>
+
+    <script src="scripts/ingredient-photo.js"></script>
+</body>
+</html>

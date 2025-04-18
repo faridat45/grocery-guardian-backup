@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grocery Guardian</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/AI-Guardian/css/main.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+
+  <body onload="displayAllergens()">
+    <div class="main-container">
+      <h1>Grocery Guardian</h1>
+
+      <!-- Allergy List with Horizontal Scroll -->
+      <div class="allergyDisplay">
+        <ul class="allergyList" id="allergens-list">
+        </ul>
+      </div>
+      <!-- Buttons for Creating List and Adding Items -->
+      <div class="button-container">
+        <button id="createNewList" onclick="makeNewList()">
+          Create New List
+        </button>
+        <button id="createNewItem" onclick="makeNewItem()">
+          Add New Item +
+        </button>
+      </div>
+
+    <div class="navbar">
+      <ul>
+        <li>
+          <a href="main.html"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li>
+          <a href="scanIndex.html"><i class="fas fa-barcode"></i> Scan</a>
+        </li>
+        <li>
+          <a href="history.html"><i class="fas fa-history"></i> History</a>
+        </li>
+        <li>
+          <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbotIcon">
+      <i class="fa-solid fa-robot"></i>
+    </div>
+    <script src="/AI-Guardian/scripts/main.js"></script>
+    <script src="/AI-Guardian/scripts/allergy-selection.js"></script>
+  </body>
+</html>

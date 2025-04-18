@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Allergen Preferences</title>
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/allergy-selection.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+
+        <h1><i class="fas fa-heartbeat"></i> Allergen Preferences</h1>
+
+        <p style="text-align: center; font-size: 0.9rem; margin-bottom: 1rem;">
+            Select allergens to avoid
+        </p>
+
+        <div class="dropdown-container">
+            <!-- Milk -->
+            <div class="toggle-item">
+                <label for="milk-toggle">Milk</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="milk-toggle" value="milk">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Peanuts -->
+            <div class="toggle-item">
+                <label for="peanuts-toggle">Peanuts</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="peanuts-toggle" value="peanuts">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Tree Nuts -->
+            <div class="toggle-item">
+                <label for="tree-nuts-toggle">Tree Nuts</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="tree-nuts-toggle" value="tree nuts">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Soy -->
+            <div class="toggle-item">
+                <label for="soy-toggle">Soy</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="soy-toggle" value="soy">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Eggs -->
+            <div class="toggle-item">
+                <label for="eggs-toggle">Eggs</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="eggs-toggle" value="eggs">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Wheat -->
+            <div class="toggle-item">
+                <label for="wheat-toggle">Wheat</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="wheat-toggle" value="wheat">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Gluten -->
+            <div class="toggle-item">
+                <label for="gluten-toggle">Gluten</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="gluten-toggle" value="gluten">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Shellfish -->
+            <div class="toggle-item">
+                <label for="shellfish-toggle">Shellfish</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="shellfish-toggle" value="shellfish">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Fish -->
+            <div class="toggle-item">
+                <label for="fish-toggle">Fish</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="fish-toggle" value="fish">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <!-- Sesame -->
+            <div class="toggle-item">
+                <label for="sesame-toggle">Sesame</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="sesame-toggle" value="sesame">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="scan-button-container">
+            <button class="scan-button" onclick="savePreferences()">Save Preferences</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+        
+        function savePreferences() {
+            // Your save logic here
+        }
+    </script>
+    <div class="navbar">
+        <ul>
+            <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="scanning.html"><i class="fas fa-barcode"></i> Scan</a></li>
+            <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </div>
+
+    <script src="/AI-Guardian/scripts/allergy-selection.js"></script>
+</body>
+</html>

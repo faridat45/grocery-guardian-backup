@@ -1,0 +1,28 @@
+ALL THE CODE SHOULD BE DONE WITHIN THE AI GUARDIAN PROJECT FOLDER
+ALL YOU NEED TO DO IS JUST CREATE THE FILE YOU ARE WORKING ON AND COMMIT & PUSH AS NORMAL
+THIS ALLOWS EVERYONE TO HAVE ACCESS TO THE FULL CODE AS TIME GOES ON INSTEAD OF JUST PIECES OF SOMEONES CODE
+this file contains instructions for any problems we encoutner along the way that we
+need to inform the rest about, anything that doesnt have a correlation to the task you are working on
+in the main project and anything that you feel wont make sense to talk about in your push comments
+
+design document, architecture diagram
+
+Use azure for database hosting
+
+chat bot to remind about expiry dates
+
+Sumit:
+qr code scanner with api then feed the response to the ai
+
+for better user experience find a way to get the expire date from the barcode, ocr,
+input the backside of the product
+
+Lindsey:
+example fake person, journey through the app prep for a demo
+purpose to functionality
+
+kestrel server to host
+
+for azure register free account
+
+consider non relational db

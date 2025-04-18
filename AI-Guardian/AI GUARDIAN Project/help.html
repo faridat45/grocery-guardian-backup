@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Help Center</title>
+  <link rel="stylesheet" href="/AI-Guardian/css/help.css">
+  <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://unpkg.com/compromise"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-100">
+  <!-- Header -->
+  <h1 class="text-xl font-bold text-center mt-3 mb-2 text-gray-800">Ask Grocery Guardian 🤖</h1>
+
+ <!-- Main flex container -->
+ <div class="flex flex-col flex-1 overflow-hidden mb-[140px] sm:mb-20">
+
+
+    <div id="contextChips" class="flex flex-wrap gap-2 px-4 py-2 text-sm text-gray-700">
+      <!-- Chips will be inserted here -->
+    </div>
+
+    
+
+    <!-- Scrollable Chat Section -->
+    <div id="chat-box"
+  class="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-white rounded-t-lg shadow-md mx-3 max-h-[calc(100vh-220px)] sm:max-h-full">
+
+
+      <div id="typingIndicator" class="hidden flex items-center text-sm text-gray-500 animate-fade-in">
+        🤖 Grocery Guardian is typing<span class="dots ml-1"><span>.</span><span>.</span><span>.</span></span>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <form id="chat-form"
+  class="flex flex-wrap sm:flex-nowrap items-center gap-2 px-2 py-2 bg-white border-t shadow z-40 fixed bottom-[64px] w-full sm:static max-w-full">
+
+
+  <input type="text" id="user-input"
+  class="flex-1 min-w-0 px-4 py-2 border rounded-md text-sm"
+  placeholder="Ask about allergens, safe food, etc." required />
+
+  <button type="submit" id="sendButton"
+  class="bg-green-600 text-white px-3 py-2 text-sm rounded-md whitespace-nowrap">Send</button>
+
+<button id="micButton"
+  class="text-green-800 px-3 py-2 text-xl rounded whitespace-nowrap">
+  <i class="fas fa-microphone"></i>
+</button>
+      
+      <input type="file" id="imageInput" accept="image/*" class="hidden" />
+      <button id="uploadImageButton"
+  class="text-green-800 px-3 py-2 text-xl rounded whitespace-nowrap">
+  <i class="fas fa-camera"></i>
+</button>
+      
+      <span id="micStatus" class="text-sm text-green-600 ml-2 hidden">🎙️ Listening...</span>
+    </form>
+
+
+    <!-- Test Quick Reply Button -->
+  <div class="px-4 py-2 bg-white shadow-inner z-10">
+    <button id="testQuickReplies" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded">
+      Quick Replies
+    </button>
+  </div>
+    <!-- Recommend Button -->
+    <div class="px-4 py-3 bg-white shadow-inner z-10">
+      <button id="recommendButton" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded">
+        <i class="fa-solid fa-heart-circle-check"></i> Recommend Safe Products
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Bottom Navbar -->
+  <div class="navbar fixed bottom-0 left-0 right-0 bg-white shadow-md p-3 z-50">
+    <ul class="flex justify-around text-sm text-gray-700">
+      <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="scanning.html"><i class="fas fa-barcode"></i> Scan</a></li>
+      <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+      <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+    </ul>
+  </div>
+
+  <!-- Clear Chat Floating Button -->
+<button id="clearChatButton" title="Clear Chat"
+class="fixed bottom-24 right-4 bg-red-500 hover:bg-red-600 text-white p-3 rounded-full shadow-lg z-50 text-xl">
+🧹
+</button>
+
+  <!-- Azure Speech SDK -->
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+  <script src="../scripts/help.js"></script>
+  
+</body>
+</html>

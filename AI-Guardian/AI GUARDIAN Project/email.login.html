@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Login</title>
+        <link rel="stylesheet" href="/AI-Guardian/css/login.css">
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Grocery Guardian</h1>
+            <!-- Website title -->
+            <h2>Sign In <span class="emoji">☺</span></h2>
+            <!-- Sign-in heading with emoji -->
+            
+      
+      
+            <!-- Reject Div-->
+            <div class="reject-div" id="reject-div" style="display: none">
+              <strong>Incorrect username or password</strong>
+            </div>
+      
+            <!-- Login Form -->
+            <div id="loginForm">
+              <!--username section-->
+              <div class="input-group">
+                <label for="username">Email:</label>
+                <input type="text" id="email" name="email" required />
+              </div>
+      
+              <div class="input-group">
+                <!--password section-->
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+              </div>
+      
+              <a href="#" class="forgot-password">Forgot your password?</a>
+              <!-- Forgot password link -->
+      
+              <button type="submit" class="login-btn">Sign In</button>
+              
+              <button class="createAccount">
+                <img
+                  class="icon"
+                />
+                Create An Account
+              </button>
+              
+              <!-- Login button -->
+              <h2>OR</h2>
+            <div>
+            <!-- Social Media Login Buttons -->
+            <button class="social-btn google">
+              <img
+                src="/AI-Guardian/img's/google-logo.png"
+                alt="Google Logo"
+                class="icon"
+              />
+              Sign In With Google
+            </button>
+      
+            <button class="social-btn apple">
+              <img
+                src="/AI-Guardian/img's/apple-logo.png"
+                alt="Apple Logo"
+                class="icon"
+              />
+              Sign In With Apple
+            </button>
+      
+            <button class="social-btn phone">
+              <img
+                src="/AI-Guardian/img's/phone-logo.png"
+                alt="Phone Logo"
+                class="icon"
+              />
+              Sign In With Phone
+            </button>
+      
+            <button class="social-btn email">
+              <img
+                src="/AI-Guardian/img's/email-logo.jpg"
+                alt="Email Logo"
+                class="icon"
+              />
+              Sign In With Email
+            </button>
+              </div>
+            </div>
+          </div>
+        <script src="/AI-Guardian/scripts/email-login.js"></script>
+    </body>
+</html>

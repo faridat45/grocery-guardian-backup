@@ -1,0 +1,273 @@
+/* ==================== AI-Guardian Scanning Styles ==================== */
+/* Modern, responsive, and optimized CSS */
+
+:root {
+    --primary-color: #2e7d32;
+    --primary-light: #81c784;
+    --primary-dark: #1b5e20;
+    --secondary-color: #388e3c;
+    --accent-color: #4caf50;
+    --background-light: #f5fbf6;
+    --background-lighter: #f1f8e9;
+    --text-dark: #263238;
+    --text-medium: #455a64;
+    --text-light: #ffffff;
+    --border-color: #cfd8dc;
+    --danger: #e53935;
+    --success: #43a047;
+    --warning: #ffa000;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+    --transition-fast: all 0.15s ease-in-out;
+    --transition-normal: all 0.3s ease-in-out;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* ==================== GLOBAL STYLES ==================== */
+body {
+    font-family: var(--font-family);
+}
+
+/* ==================== MAIN CONTAINER ==================== */
+.main {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    width: min(90%, 800px);
+    margin: var(--spacing-md) auto;
+    border: 1px solid var(--border-color);
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.main h1 {
+    color: var(--primary-dark);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    font-size: 1.8rem;
+    font-family: var(--font-family);
+    position: relative;
+    padding-bottom: var(--spacing-xs);
+}
+
+.main h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 30%;
+    right: 30%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    border-radius: 3px;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+button {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-xs);
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    width: calc(50% - 1rem);
+    max-width: 220px;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+button.secondary {
+    background: white;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-light);
+}
+
+button.secondary:hover {
+    background: var(--background-lighter);
+}
+
+button.danger {
+    background: linear-gradient(135deg, var(--danger), #f44336);
+}
+
+/* ==================== INPUT STYLES ==================== */
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    width: 100%;
+    max-width: 400px;
+    transition: var(--transition-fast);
+    font-family: var(--font-family);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* ==================== RESULT DISPLAY ==================== */
+#result, #alternativeSection, #result2 {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--background-lighter);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--accent-color);
+    animation: fadeIn 0.5s ease-out;
+}
+
+#productImage {
+    max-width: 180px;
+    max-height: 180px;
+    margin: var(--spacing-sm) 0;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    object-fit: contain;
+    background: white;
+    padding: var(--spacing-xs);
+}
+/* ==================== SCANNING MODES STYLES ==================== */
+.scan-modes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    margin: var(--spacing-lg) 0;
+  }
+  
+  .scan-mode-button {
+    width: 100%;
+    max-width: 300px;
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    border: none;
+  }
+  
+  .primary-scan {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .secondary-scan {
+    background: white;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-light);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .scan-mode-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .scan-mode-button i {
+    font-size: 1.2rem;
+  }
+  
+  /* Camera container styling */
+  #cameraContainer {
+    width: 100%;
+    max-width: 500px;
+    margin: var(--spacing-md) auto;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    display: none; /* Hidden by default */
+  }
+  
+  /* Manual input container styling */
+  #manualInputContainer {
+    width: 100%;
+    max-width: 400px;
+    margin: var(--spacing-md) auto;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  #manualInputContainer input {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-family);
+  }
+  
+  #manualInputContainer button {
+    width: 100%;
+    margin: 0;
+  }
+  
+  /* Active state for containers */
+  .active-scan-mode {
+    display: block !important;
+    animation: fadeIn 0.3s ease-out;
+  }
+/* ==================== MOBILE RESPONSIVENESS ==================== */
+@media screen and (max-width: 480px) {
+    .main {
+        padding: var(--spacing-md);
+        width: 95%;
+        border-radius: var(--border-radius-md);
+    }
+
+    button {
+        width: 100%;
+        max-width: none;
+        margin: var(--spacing-xs) 0;
+    }
+    .scan-modes {
+        gap: var(--spacing-sm);
+      }
+      
+      .scan-mode-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+      }
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase History</title>
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <h1><i class="fas fa-history"></i>History</h1>
+        <h2 class="subtitle">Previously Scanned Items</h2>
+        
+
+        <div class="history-item" onclick="viewProductDetails('12345')">
+            <div class="item-info">
+                <span class="item-name">Organic Almond Milk</span>
+                <span class="item-date">May 15, 2023</span>
+            </div>
+            <div class="item-status safe" id="status-12345">
+                <i class="fas fa-check-circle"></i> <span class="status-text">Safe</span>
+            </div>
+        
+            <!-- The toggle button must stop the parent click -->
+            <button class="toggle-status" onclick="event.stopPropagation(); toggleStatus('12345');">
+                <i class="fas fa-pen"></i>
+            </button>
+        </div>
+        
+
+            
+<div class="history-item" onclick="viewProductDetails('67890')">
+    <div class="item-info">
+        <span class="item-name">Organic Almond Milk</span>
+        <span class="item-date">May 15, 2023</span>
+    </div>
+    <div class="item-status safe" id="status-12345">
+        <i class="fas fa-check-circle"></i> <span class="status-text">Safe</span>
+    </div>
+
+    <!-- The toggle button must stop the parent click -->
+    <button class="toggle-status" onclick="event.stopPropagation(); toggleStatus('67890');">
+        <i class="fas fa-pen"></i>
+    </button>
+</div>
+
+
+
+            
+<div class="history-item" onclick="viewProductDetails('23456')">
+    <div class="item-info">
+        <span class="item-name">Organic Almond Milk</span>
+        <span class="item-date">May 15, 2023</span>
+    </div>
+    <div class="item-status safe" id="status-12345">
+        <i class="fas fa-check-circle"></i> <span class="status-text">Safe</span>
+    </div>
+
+    <!-- The toggle button must stop the parent click -->
+    <button class="toggle-status" onclick="event.stopPropagation(); toggleStatus('23456');">
+        <i class="fas fa-pen"></i>
+    </button>
+</div>
+
+
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="navbar">
+        <ul>
+            <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="scanIndex.html"><i class="fas fa-barcode"></i> Scan</a></li>
+            <li><a href="history.html" class="active"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </div>
+
+    <script>
+        function viewProductDetails(productId) {
+            // In a real app, this would redirect to a details page with the product ID
+            // For this example, we'll show an alert
+            window.location.href = `product-details.html?id=${productId}`;
+        }
+    </script>
+
+    <!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbotIcon">
+    <i class="fa-solid fa-robot"></i>
+  </div>
+
+<script src="/AI-Guardian/scripts/history.js"></script>
+</body>
+
+</html>

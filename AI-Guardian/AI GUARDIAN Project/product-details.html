@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <button class="back-button" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+        
+        <h1 id="productTitle">Product Details</h1>
+        
+        <!-- Product Status -->
+        <div id="productStatus" class="product-status">
+            <i class="fas fa-check-circle"></i>
+            <h2>SAFE TO EAT</h2>
+            <p>No allergens detected based on your preferences</p>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="product-info">
+            <img id="productImage" src="https://via.placeholder.com/200" alt="Product Image" class="product-image">
+            
+            <div class="info-section">
+                <h3>Ingredients:</h3>
+                <ul id="ingredientsList" class="ingredients-list">
+                    <!-- Will be filled by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Alternatives Section -->
+        <div id="alternativesSection" class="alternatives-section">
+            <h3>Safe Alternatives:</h3>
+            <div id="alternativeProducts" class="alternatives-grid">
+                <!-- Will be filled by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // This would be populated from your database based on the product ID
+        // Here's just example data
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            // Example product data - in real app you would fetch this
+            const product = {
+                id: productId,
+                name: "Peanut Butter Cookies",
+                status: "unsafe",
+                image: "https://via.placeholder.com/200?text=Peanut+Butter+Cookies",
+                ingredients: [
+                    "Wheat Flour",
+                    "Peanuts",
+                    "Sugar",
+                    "Butter",
+                    "Eggs",
+                    "Salt"
+                ],
+                alternatives: [
+                    {
+                        name: "Sunflower Seed Cookies",
+                        image: "https://via.placeholder.com/150?text=Sunflower+Cookies"
+                    },
+                    {
+                        name: "Oatmeal Raisin Cookies",
+                        image: "https://via.placeholder.com/150?text=Oatmeal+Cookies"
+                    }
+                ]
+            };
+            
+            // Update the page with product data
+            document.getElementById('productTitle').textContent = product.name;
+            document.getElementById('productImage').src = product.image;
+            
+            // Set status
+            const statusElement = document.getElementById('productStatus');
+            if (product.status === "unsafe") {
+                statusElement.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>BE AWARE!</h2>
+                    <p>Contains allergens based on your preferences</p>
+                `;
+                statusElement.className = "product-status unsafe";
+            }
+            
+            // Add ingredients
+            const ingredientsList = document.getElementById('ingredientsList');
+            product.ingredients.forEach(ingredient => {
+                const li = document.createElement('li');
+                li.textContent = ingredient;
+                ingredientsList.appendChild(li);
+            });
+            
+            // Add alternatives if unsafe
+            if (product.status === "unsafe" && product.alternatives.length > 0) {
+                const alternativesGrid = document.getElementById('alternativeProducts');
+                product.alternatives.forEach(alt => {
+                    const altItem = document.createElement('div');
+                    altItem.className = "alternative-item";
+                    altItem.innerHTML = `
+                        <img src="${alt.image}" alt="${alt.name}">
+                        <p>${alt.name}</p>
+                    `;
+                    alternativesGrid.appendChild(altItem);
+                });
+            } else {
+                document.getElementById('alternativesSection').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

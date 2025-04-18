@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            margin: 5px 0;
+            width: 200px;
+        }
+        #productImage {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #555;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manual Barcode Input</h1>
+    
+    <!-- Initial View -->
+    <div id="manualInput">
+        <label for="barcode">Enter Barcode:</label>
+        <input type="text" id="barcode" placeholder="Enter barcode">
+        <button id="fetchButton">Get Ingredients</button>
+    </div>
+
+    <!-- After Fetch View (initially hidden) -->
+    <div id="result" class="hidden">
+        <h2>Product Information</h2>
+        <p><strong>Product Name:</strong> <span id="productName">-</span></p>
+        <p><strong>Ingredients:</strong> <span id="ingredients">-</span></p>
+        <p><strong>Potential Allergens:</strong> <span id="potentialAllergens">-</span></p>
+        <p><strong>Nutrient Levels:</strong> <span id="nutrientLevels">-</span></p>
+        <p><strong>Sugar:</strong> <span id="sugarLevel">-</span></p>
+        <img id="productImage" src="" alt="Product Image" class="hidden">
+        
+        <button id="addQuantityButton">Add Quantity</button>
+        <div id="quantityInput" class="hidden">
+            <p>How many of this product did you purchase?</p>
+            <input type="number" id="quantity" placeholder="Enter quantity" min="1">
+            <button id="confirmButton">Save</button>
+        </div>
+        <p id="saveNotice"></p>
+    </div>
+
+    <a href="scanIndex.html" class="back-button">Back to Main</a>
+
+    <script>
+        let foodName = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fetchButton').addEventListener('click', fetchProductInfo);
+            document.getElementById('addQuantityButton').addEventListener('click', function() {
+                document.getElementById('quantityInput').classList.remove('hidden');
+            });
+            document.getElementById('confirmButton').addEventListener('click', function() {
+                document.getElementById('saveNotice').innerHTML = "This product is saved";
+            });
+        });
+
+        async function fetchProductInfo() {
+            const barcode = document.getElementById('barcode').value;
+            if (!barcode) {
+                alert('Please enter a barcode.');
+                return;
+            }
+
+            // Show loading state
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.textContent = 'Loading...';
+            fetchButton.disabled = true;
+
+            try {
+                const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === 1) {
+                    const product = data.product;
+                    foodName = product.product_name || product.generic_name_en || product.product_name_en || 
+                              product.product_name_it || product.generic_name || product.abbreviated_product_name || 
+                              product.brands || 'Unknown Product';
+
+                    const ingredients = product.ingredients_text_en || product.ingredients_text || 
+                                       product.ingredients_hierarchy || product.ingredients_original_tags || 
+                                       'No ingredients listed';
+                    const potentialAllergens = product.allergens || 'No data';
+                    const sugarLevel = (product.nutriments?.sugars ? product.nutriments.sugars + " " + (product.nutriments.sugars_unit || 'g') : 
+                                      product.nutriments?.sugars_100g ? product.nutriments.sugars_100g + " " + (product.nutriments.sugars_unit || 'g') :
+                                      product.nutriments?.sugars_value ? product.nutriments.sugars_value + " " + (product.nutriments.sugars_unit || 'g') : 
+                                      'No data');
+
+                    document.getElementById('productName').textContent = foodName;
+                    document.getElementById('ingredients').textContent = ingredients;
+                    document.getElementById('potentialAllergens').textContent = potentialAllergens;
+                    document.getElementById('sugarLevel').textContent = sugarLevel;
+
+                    const nutrientLevels = product.nutrient_levels || {};
+                    const nutrientText = Object.entries(nutrientLevels).map(([key, value]) => `${key}: ${value}`).join(", "); 					 
+                    document.getElementById('nutrientLevels').textContent = nutrientText || "No data";
+
+                    document.getElementById('productImage').classList.remove('hidden');
+                    const imageUrl = product.image_front_small_url || 
+                                   (product.selected_images?.front?.small?.it || 
+                                    "https://cdn-icons-png.flaticon.com/512/1178/1178479.png");
+                    document.getElementById('productImage').src = imageUrl;
+
+                    // Show the result section
+                    document.getElementById('result').classList.remove('hidden');
+                } else {
+                    document.getElementById('productName').textContent = 'Product not found';
+                    document.getElementById('ingredients').textContent = '-';
+                    document.getElementById('productImage').classList.add('hidden');
+                    document.getElementById('result').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error fetching product info:', error);
+                alert('Failed to fetch product information. Please try again.');
+            } finally {
+                fetchButton.textContent = 'Get Ingredients';
+                fetchButton.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

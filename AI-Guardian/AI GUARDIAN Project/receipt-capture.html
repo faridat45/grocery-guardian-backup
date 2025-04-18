@@ -1,0 +1,130 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <title>Capture Image</title>
+</head>
+<body>
+    <div id = "camContainer">
+        <video id="video" width="640" height="480" autoplay></video>
+        <img id="capturedImage" alt="Captured Image" style="display:none;" width="640" height="480"/>
+    </div>
+    
+    <button id="capture">Capture</button>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <script>
+        const video = document.getElementById('video'); //displays the live camera 
+
+        navigator.mediaDevices.getUserMedia({ video: true }) // Asks the user for permission to use the camera
+            .then(stream => {
+                video.srcObject = stream;
+                window.localStream = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing the camera: ", err); // catches any error
+            });
+
+        const captureButton = document.getElementById('capture'); // Capture the image when the button is clicked
+        captureButton.addEventListener('click', () => {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const imageUrl = canvas.toDataURL('image/jpeg');  // Convert the canvas image to a URL
+            
+            // Displaying the captured image
+            const capturedImage = document.getElementById('capturedImage');
+            capturedImage.src = imageUrl;
+            capturedImage.style.display = 'block';
+            video.style.display = 'none'; // hides video from web page 
+
+            // Create a link to download the image
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'captured_image.jpeg';
+            link.click();
+
+            // Getting the media tracks(video & audio) and stopping each track
+            // 
+            const stream = window.localStream;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null; //Removing the video stream from the video element
+        });
+
+    </script>
+
+<div class="navbar">
+    <ul>
+        <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="scanning.html"><i class="fas fa-barcode"></i> Scan</a></li>
+        <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+    </ul>
+</div>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture Receipt</title>
+  <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+  <style>
+    video, canvas { width: 100%; max-width: 480px; border-radius: 12px; }
+    #captureBtn { margin-top: 10px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>📸 Capture Receipt</h1>
+  <video id="video" autoplay></video>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <button id="captureBtn">Capture & Upload</button>
+
+  <pre id="ocrResult"></pre>
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureBtn = document.getElementById('captureBtn');
+    const ocrResult = document.getElementById('ocrResult');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => { video.srcObject = stream; })
+      .catch(err => console.error('Camera error:', err));
+
+    captureBtn.addEventListener('click', async () => {
+      const ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append('document', blob, 'capture.jpg');
+
+        try {
+          const res = await fetch('https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict', {
+            method: 'POST',
+            headers: { 'Authorization': 'Token 64eb36356c646964a70ae2ef537bd463' },
+            body: formData
+          });
+
+          const result = await res.json();
+          const items = result?.document?.inference?.prediction?.line_items || [];
+          const parsed = items.map(i => `${i.description?.value} x${i.quantity?.value || 1} - $${i.total_amount?.value || 0}`).join('\n');
+          ocrResult.textContent = parsed || 'No items found.';
+        } catch (err) {
+          console.error('Upload failed:', err);
+        }
+      }, 'image/jpeg');
+    });
+  </script>
+</body>
+</html>

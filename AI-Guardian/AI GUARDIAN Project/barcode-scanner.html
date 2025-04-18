@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #productImage {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+        #interactive {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 10px 0;
+        }
+        #interactive.viewport {
+            position: relative;
+        }
+        #interactive.viewport > canvas, #interactive.viewport > video {
+            max-width: 100%;
+            width: 100%;
+        }
+        canvas.drawing, canvas.drawingBuffer {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #555;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Barcode Scanner</h1>
+    
+    <!-- Initial View -->
+    <button id="scanButton">Start Scanning</button>
+    <div id="camera" class="hidden">
+        <div id="interactive" class="viewport"></div>
+        <button id="stopButton">Stop Scanning</button>
+    </div>
+    
+    <!-- After Scan View (initially hidden) -->
+    <div id="result" class="hidden">
+        <h2>Product Information</h2>
+        <p><strong>Product Name:</strong> <span id="productName">-</span></p>
+        <p><strong>Ingredients:</strong> <span id="ingredients">-</span></p>
+        <p><strong>Potential Allergens:</strong> <span id="potentialAllergens">-</span></p>
+        <p><strong>Nutrient Levels:</strong> <span id="nutrientLevels">-</span></p>
+        <p><strong>Sugar:</strong> <span id="sugarLevel">-</span></p>
+        <img id="productImage" src="" alt="Product Image" class="hidden">
+        
+        <button id="addQuantityButton">Add Quantity</button>
+        <div id="quantityInput" class="hidden">
+            <p>How many of this product did you purchase?</p>
+            <input type="number" id="quantity" placeholder="Enter quantity" min="1">
+            <button id="confirmButton">Save</button>
+        </div>
+        <p id="saveNotice"></p>
+    </div>
+
+    <a href="scanIndex.html" class="back-button">Back to Main</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scanButton = document.getElementById('scanButton');
+            const stopButton = document.getElementById('stopButton');
+            const cameraDiv = document.getElementById('camera');
+            const resultDiv = document.getElementById('result');
+            const addQuantityButton = document.getElementById('addQuantityButton');
+            const quantityInput = document.getElementById('quantityInput');
+            const interactive = document.getElementById('interactive');
+            
+            // Show only the scan button initially
+            scanButton.addEventListener('click', function() {
+                scanButton.classList.add('hidden');
+                cameraDiv.classList.remove('hidden');
+                initScanner();
+            });
+            
+            // Stop scanning button
+            stopButton.addEventListener('click', function() {
+                stopScanner();
+                cameraDiv.classList.add('hidden');
+                scanButton.classList.remove('hidden');
+            });
+            
+            // Show quantity input when "Add Quantity" is clicked
+            addQuantityButton.addEventListener('click', function() {
+                quantityInput.classList.remove('hidden');
+            });
+            
+            // Save button functionality
+            document.getElementById('confirmButton').addEventListener('click', function() {
+                const quantity = document.getElementById('quantity').value;
+                if (quantity && quantity > 0) {
+                    document.getElementById('saveNotice').textContent = `Saved ${quantity} items!`;
+                    // Here you would typically save to database or storage
+                } else {
+                    alert('Please enter a valid quantity');
+                }
+            });
+            
+            // Barcode scanner initialization
+            function initScanner() {
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: interactive,
+                        constraints: {
+                            width: 480,
+                            height: 320,
+                            facingMode: "environment" // or "user" for front camera
+                        },
+                    },
+                    decoder: {
+                        readers: [
+                            "ean_reader",
+                            "ean_8_reader",
+                            "code_128_reader",
+                            "code_39_reader",
+                            "code_39_vin_reader",
+                            "codabar_reader",
+                            "upc_reader",
+                            "upc_e_reader"
+                        ]
+                    },
+                }, function(err) {
+                    if (err) {
+                        console.error(err);
+                        alert("Error initializing barcode scanner: " + err);
+                        return;
+                    }
+                    console.log("Initialization finished. Ready to start");
+                    Quagga.start();
+                });
+                
+                Quagga.onDetected(function(result) {
+                    stopScanner();
+                    cameraDiv.classList.add('hidden');
+                    resultDiv.classList.remove('hidden');
+                    
+                    const code = result.codeResult.code;
+                    console.log("Barcode detected: ", code);
+                    
+                    // Here you would typically look up the product in your database
+                    // For now we'll simulate product data based on the barcode
+                    simulateProductLookup(code);
+                });
+            }
+            
+            function stopScanner() {
+                Quagga.stop();
+                console.log("Scanner stopped");
+            }
+            
+            function simulateProductLookup(barcode) {
+                // This is a simulation - replace with your actual product lookup
+                let productData = {
+                    name: "Unknown Product",
+                    ingredients: "Not available",
+                    allergens: "Not specified",
+                    nutrients: "No data",
+                    sugar: "Unknown",
+                    image: ""
+                };
+                
+                // Some example products for demonstration
+                if (barcode === "123456789012") {
+                    productData = {
+                        name: "Organic Apples",
+                        ingredients: "Organic apples",
+                        allergens: "None",
+                        nutrients: "High in fiber",
+                        sugar: "19g per apple",
+                        image: "https://example.com/apple.jpg"
+                    };
+                } else if (barcode === "987654321098") {
+                    productData = {
+                        name: "Whole Grain Bread",
+                        ingredients: "Whole wheat flour, water, yeast, salt",
+                        allergens: "Wheat",
+                        nutrients: "Good source of fiber",
+                        sugar: "2g per slice",
+                        image: "https://example.com/bread.jpg"
+                    };
+                }
+                
+                // Update the UI with product data
+                document.getElementById('productName').textContent = productData.name;
+                document.getElementById('ingredients').textContent = productData.ingredients;
+                document.getElementById('potentialAllergens').textContent = productData.allergens;
+                document.getElementById('nutrientLevels').textContent = productData.nutrients;
+                document.getElementById('sugarLevel').textContent = productData.sugar;
+                
+                if (productData.image) {
+                    const img = document.getElementById('productImage');
+                    img.src = productData.image;
+                    img.classList.remove('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

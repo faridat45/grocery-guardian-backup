@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Guardian</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/AI-Guardian/css/profile.css">
+    <link rel="stylesheet" href="/AI-Guardian/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+</head>
+
+<body>
+    <!-- working -->
+
+    <div class="navbar">
+        <ul>
+            <li><a href="main.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="scanIndex.html"><i class="fas fa-barcode"></i> Scan</a></li>
+            <li><a href="history.html"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </div>
+
+    <div class="common-container profile-container">
+
+        <!-- Profile Picture Upload -->
+        <label for="profilePicInput" class="profile-pic-container">
+            <img id="profilePic" src="/AI-Guardian/img's/default-profile.jpg" alt="Profile Picture">
+        </label>
+        <input type="file" id="profilePicInput" accept="image/*">
+
+        
+        <input type="file" id="profilePicInput" accept="image/*">
+
+        <!-- User Name -->
+        <div class="name-container">
+            <input type="text" id="userName" placeholder="Enter your name">
+            <span id="displayName" style="display: none;"></span>
+            <br>
+            <button id="saveName">Save</button>
+            <button id="editName" style="display: none;">Edit</button>
+        </div>
+        
+        <br>
+        <!-- Allergens Selection -->
+        <div class="allergy-container">
+            <h4 class="allergy-heading">Your Allergies</h4>
+            <div class="allergy-dropdown">
+                <button id="toggleAllergyList">Show Allergies ⬇</button>
+                <ul id="selectedAllergyList" class="hidden"></ul>
+            </div>
+            <button onclick="window.location.href='allergy-selection.html'" id="addAllergy">Add Allergy</button>
+            <button onclick="location.href='overview.html';" id="monthlyOverview">Monthly Overview</button>
+        </div>
+
+<script src="/AI-Guardian/scripts/profile.js"></script>
+
+<!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbotIcon">
+    <i class="fa-solid fa-robot"></i>
+</div>
+
+
+
+
+</body>
+</html>
