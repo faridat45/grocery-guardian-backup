@@ -4,103 +4,133 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grocery Guardian - Login</title>
-    <link rel="stylesheet" href="/AI-Guardian/css/login.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+      /* Contents of login.css */
+      body {
+          font-family: 'Montserrat', sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh; 
+          margin: 0;
+          flex-direction: column;
+          color: #333;
+          background: linear-gradient(180deg, #FF9A8B, #FF6A88, #FF99AC, #FFC3A0, #FFDD94, #A1C4FD, #C2E9FB);
+          background-size: 400% 400%;
+          animation: skyGradientAnimation 25s infinite ease-in-out;
+          padding: 1rem; 
+          box-sizing: border-box;
+          overflow: hidden;
+      }
+      @keyframes skyGradientAnimation {
+          0% { background-position: 0% 50%; }
+          25% { background-position: 50% 100%; }
+          50% { background-position: 100% 50%; }
+          75% { background-position: 50% 0%; }
+          100% { background-position: 0% 50%; }
+      }
+      .login-container {
+          background: rgba(255, 255, 255, 0.85);
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+          text-align: center;
+          width: 380px;
+          max-width: 95%;
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+      /* Other CSS omitted for brevity */
+    </style>
   </head>
 
   <body>
     <!-- Login Container -->
     <div class="login-container">
       <h1>Grocery Guardian</h1>
-      <!-- Website title -->
       <h2>Sign In <span class="emoji">☺</span></h2>
-      <!-- Sign-in heading with emoji -->
-      
 
-
-      <!-- Reject Div-->
       <div class="reject-div" id="reject-div" style="display: none">
         <strong>Incorrect username or password</strong>
       </div>
 
-      <!-- Login Form -->
       <div id="loginForm">
-        <!--username section-->
         <div class="input-group">
           <label for="username">Username:</label>
           <input type="text" id="username" name="username" required />
         </div>
-
         <div class="input-group">
-          <!--password section-->
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
         </div>
-
         <a href="#" class="forgot-password">Forgot your password?</a>
-        <!-- Forgot password link -->
-
         <button type="submit" class="login-btn">Sign In</button>
-        
-        <button class="createAccount">
-          <img
-            class="icon"
-          />
-          Create An Account
-        </button>
-        
-        <!-- Login button -->
+        <button class="createAccount">Create An Account</button>
         <h2>OR</h2>
-      <div>
-      <!-- Social Media Login Buttons -->
-      <button class="social-btn google">
-        <img
-          src="/AI-Guardian/img's/google-logo.png"
-          alt="Google Logo"
-          class="icon"
-        />
-        Sign In With Google
-      </button>
-
-      <button class="social-btn apple">
-        <img
-          src="/AI-Guardian/img's/apple-logo.png"
-          alt="Apple Logo"
-          class="icon"
-        />
-        Sign In With Apple
-      </button>
-
-      <button class="social-btn phone">
-        <img
-          src="/AI-Guardian/img's/phone-logo.png"
-          alt="Phone Logo"
-          class="icon"
-        />
-        Sign In With Phone
-      </button>
-
-      <button class="social-btn email">
-        <img
-          src="/AI-Guardian/img's/email-logo.jpg"
-          alt="Email Logo"
-          class="icon"
-        />
-        Sign In With Email
-      </button>
-        </div>
+        <button class="social-btn google">Sign In With Google</button>
+        <button class="social-btn apple">Sign In With Apple</button>
+        <button class="social-btn phone">Sign In With Phone</button>
+        <button class="social-btn email">Sign In With Email</button>
       </div>
     </div>
 
-   
+    <!-- Inline JavaScript -->
+    <script type="text/javascript">
+      // Contents of login.js
+      const loginForm = document.getElementById("loginForm");
 
-    <script type="module" src="/AI-Guardian/scripts/login.js"></script>
-    <!-- Linking JavaScript file -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-        
+      document.querySelector(".login-btn").addEventListener("click", async () => {
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+          const rejectDiv = document.getElementById('reject-div');
+
+          try {
+              const response = await fetch('http://localhost:5501/loginnormal', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username: username, password: password }),
+              });
+
+              const data = await response.json();
+              if(data.success) {
+                  localStorage.setItem('currentUser',JSON.stringify(data.user));
+                  window.location.href="main.html";
+              }
+          } catch (error) {
+              rejectDiv.style.display = 'block';
+          }
+      });
+
+      document.querySelector(".google").addEventListener("click", function () {
+          window.location.href = "google-login.html";
+      });
+
+      document.querySelector(".apple").addEventListener("click", function () {
+          window.location.href = "apple-login.html";
+      });
+
+      document.querySelector(".phone").addEventListener("click", function () {
+          window.location.href = "phone-login.html";
+      });
+
+      document.querySelector(".email").addEventListener("click", function () {
+          window.location.href = "email.login.html";
+      });
+
+      document.querySelector(".createAccount").addEventListener("click", function () {
+          window.location.href = "createAccount.html";
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+          const chatbotIcon = document.getElementById('chatbotIcon');
+          if (chatbotIcon) {
+              chatbotIcon.addEventListener('click', () => {
+                  window.location.href = '/AI-GUARDIAN/AI GUARDIAN Project/help.html';
+              });
+          }
+      });
+    </script>
   </body>
 </html>
